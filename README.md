@@ -1,219 +1,75 @@
-# Java Template
+# HT3 - Ordenamientos
 
-## Project Structure
+Hoja de trabajo 3 de Algoritmos y Estructura de Datos. Implementa 5 algoritmos de ordenamiento y mide sus tiempos con un profiler.
 
-```
-java-template/
-├── src/
-│   ├── main/
-│   │   └── java/
-│   │       └── com/template/
-│   │           └── Main.java
-│   └── test/
-│       └── java/
-│           └── com/template/
-│               └── MainTest.java
-├── lib/                    # JUnit JAR for testing
-├── out/
-│   ├── main/              # Compiled main classes
-│   └── test/              # Compiled test classes
-├── recordings/            # JFR recordings output
-├── Makefile               # Build script for Linux/macOS
-├── build.bat              # Build script for Windows (Batch)
-├── build.ps1              # Build script for Windows (PowerShell)
-└── README.md
-```
-
-## Requirements
-
-- **JDK 25** (OpenJDK 25.0.2 or compatible)
-- **Build tool:**
-  - **Linux/macOS:** Make
-  - **Windows:** Batch (build.bat) or PowerShell (build.ps1)
-
-## Setup
-
-### 1. Verify JDK Installation
-
-The build scripts expect JDK 25 to be available. They will use:
-- `JAVA_HOME` environment variable if set
-- Otherwise, will attempt to find Java in your system PATH
-
-To verify your JDK version:
-```bash
-java --version
-```
-
-### 2. Set JAVA_HOME (Optional but Recommended)
-
-**Linux/macOS:**
-```bash
-export JAVA_HOME=/path/to/jdk-25
-```
-
-**Windows (Command Prompt):**
-```cmd
-set JAVA_HOME=C:\Path\To\jdk-25
-```
-
-**Windows (PowerShell):**
-```powershell
-$env:JAVA_HOME = "C:\Path\To\jdk-25"
-```
-
-## Usage
-
-Choose the appropriate build script for your operating system:
-
-### Linux/macOS (Makefile)
-
-#### Compile the Project
-```bash
-make compile
-```
-
-#### Run the Application
-```bash
-make run
-```
-
-#### Compile Tests
-```bash
-make compile-test
-```
-
-#### Run Tests
-```bash
-make test
-```
-
-#### Profile with Java Flight Recorder
-```bash
-make profile
-```
-
-#### Clean Build Artifacts
-```bash
-make clean
-```
-
-#### Help
-```bash
-make help
-```
+Por:
+Héctor Duarte - 25939
+Edgar Guevara - 251154
 
 ---
 
-### Windows (Batch Script)
+## Cómo correr el programa
 
-#### Compile the Project
-```cmd
-build.bat compile
+Entra a la carpeta donde están los archivos y corre esto en la terminal:
+
+```bash
+# Compilar
+javac *.java
+
+# Correr normal
+java Main
+
+# Correr con profiler (JDK 9 en adelante)
+java -XX:StartFlightRecording=duration=60s,filename=resultado.jfr Main
 ```
 
-#### Run the Application
-```cmd
-build.bat run
-```
-
-#### Compile Tests
-```cmd
-build.bat compile-test
-```
-
-#### Run Tests
-```cmd
-build.bat test
-```
-
-#### Profile with Java Flight Recorder
-```cmd
-build.bat profile
-```
-
-#### Clean Build Artifacts
-```cmd
-build.bat clean
-```
-
-#### Help
-```cmd
-build.bat help
-```
+El programa va a pausar al inicio y pedirte que presiones Enter. Ese momento es para que abras VisualVM y te conectes antes de que empiece a ordenar.
 
 ---
 
-### Windows (PowerShell Script)
+## Algoritmos implementados
 
-#### Compile the Project
-```powershell
-.\build.ps1 compile
-```
-
-#### Run the Application
-```powershell
-.\build.ps1 run
-```
-
-#### Compile Tests
-```powershell
-.\build.ps1 compile-test
-```
-
-#### Run Tests
-```powershell
-.\build.ps1 test
-```
-
-#### Profile with Java Flight Recorder
-```powershell
-.\build.ps1 profile
-```
-
-#### Clean Build Artifacts
-```powershell
-.\build.ps1 clean
-```
-
-#### Help
-```powershell
-.\build.ps1 help
-```
+| Algoritmo  | Complejidad promedio | Elegido por |
+|------------|----------------------|-------------|
+| Gnome Sort | O(n²)                | requerido   |
+| Merge Sort | O(n log n)           | requerido   |
+| Quick Sort | O(n log n)           | requerido   |
+| Radix Sort | O(nk)                | requerido   |
+| Shell Sort | O(n log² n)          | la pareja   |
 
 ---
 
-## Features
+## Cómo correr las pruebas JUnit
 
-### Compile
-Compiles all Java sources in `src/main/java/` to `out/main/`.
+Necesitas bajar estos dos archivos JAR y agregarlos al proyecto (o usar IDE que los integre:
 
-### Run
-Compiles (if needed) and runs the main application.
+- junit-4.13.2.jar → https://search.maven.org/artifact/junit/junit/4.13.2/jar
+- hamcrest-core-1.3.jar → https://search.maven.org/artifact/org.hamcrest/hamcrest-core/1.3/jar
 
-### Compile Tests
-Compiles test sources. Requires JUnit JAR in `lib/` directory.
+En IntelliJ: File → Project Structure → Libraries → + → agregar los dos JAR.
+Luego clic derecho en `SortTest.java` → Run.
 
-### Run Tests
-Compiles and runs all JUnit tests.
+---
 
-### Profile with Java Flight Recorder
-Runs the application with JFR profiling enabled. The recording will be saved to `recordings/` directory with a timestamp.
+## Cómo usar el profiler
 
-**JFR Configuration:**
-- Duration: 60 seconds (configurable)
-- Settings: `profile` (higher overhead, more detailed profiling)
-- Output: Timestamped `.jfr` files in `recordings/`
+Usamos Java Flight Recorder (JFR), que viene incluido con el JDK:
 
-### Clean
-Removes all compiled classes and JFR recordings.
+```bash
+java -XX:StartFlightRecording=duration=60s,filename=resultado.jfr Main
+```
 
-## Notes for Windows Users
+Esto genera un archivo `resultado.jfr`. Para verlo visualmente descarga JDK Mission Control en https://adoptium.net/jmc y abre el archivo desde ahí.
 
-- **PowerShell Execution Policy:** If you encounter an error running `build.ps1`, you may need to adjust your execution policy:
-  ```powershell
-  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-  ```
+---
 
-- **Path Separators:** The Windows scripts automatically handle Windows path separators (`\`) and classpath separators (`;`).
+## Git
 
-- **WSL Alternative:** If you prefer, you can use Windows Subsystem for Linux (WSL) and run the Makefile directly.
+```bash
+git init
+git add .
+git commit -m "v1 - estructura inicial"
+git commit -m "v2 - algoritmos implementados"
+git commit -m "v3 - pruebas JUnit"
+git commit -m "v4 - medicion de tiempos con profiler"
+```
